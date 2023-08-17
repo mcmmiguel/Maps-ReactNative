@@ -3,6 +3,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import 'react-native-gesture-handler';
 import Navigator from './src/navigation/navigator';
 import { PermissionsProvider } from './src/context/PermissionsContext';
+import { enableLatestRenderer } from 'react-native-maps';
+
+enableLatestRenderer();
 
 const AppState = ({ children }: any) => {
   return (
