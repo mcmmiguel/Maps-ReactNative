@@ -1,19 +1,19 @@
-import React, { useRef, useEffect } from 'react';
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import React, { useRef, useEffect, useState } from 'react';
+import MapView, { Marker, Polyline } from 'react-native-maps';
 import { useLocation } from '../hooks/useLocation';
 import LoadingScreen from '../screens/LoadingScreen';
 import Fab from './Fab';
 
-
-
-
 const Map = () => {
+
+    const [showPolyline, setShowPolyline] = useState(true);
 
     const { hasLocation,
         initialPosition,
         getCurrentLocation,
         followUserLocation,
         stopFollowUserLocation,
+        routeLines,
         userLocation } = useLocation();
 
     const mapViewRef = useRef<MapView>();
@@ -56,13 +56,23 @@ const Map = () => {
                 showsUserLocation
                 // provider={PROVIDER_GOOGLE}
                 initialRegion={{
-                    latitude: initialPosition.latitude,
-                    longitude: initialPosition.longitude,
+                    latitude: 18.935640112827077,
+                    longitude: -103.96473259001439,
                     latitudeDelta: 0.0922,
                     longitudeDelta: 0.0421,
                 }}
                 onTouchStart={() => followingRef.current = false}
             >
+                {
+                    showPolyline && (
+                        <Polyline
+                            coordinates={routeLines}
+                            strokeColor="black"
+                            strokeWidth={3}
+                        />
+                    )
+                }
+
                 <Marker
                     coordinate={{
                         latitude: 18.935640112827077,
@@ -74,9 +84,15 @@ const Map = () => {
             </MapView>
 
             <Fab
-                iconName="compass"
+                iconName="compass-outline"
                 onPress={centerPosition}
                 style={{ position: 'absolute', bottom: 20, right: 20 }}
+            />
+
+            <Fab
+                iconName="brush-outline"
+                onPress={() => setShowPolyline(!showPolyline)}
+                style={{ position: 'absolute', bottom: 80, right: 20 }}
             />
         </>
     );
