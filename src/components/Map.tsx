@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { useLocation } from '../hooks/useLocation';
 import LoadingScreen from '../screens/LoadingScreen';
@@ -12,56 +12,65 @@ const Map = () => {
         initialPosition,
         getCurrentLocation,
         followUserLocation,
+        userLocation,
         stopFollowUserLocation,
-        routeLines,
-        userLocation } = useLocation();
+        routeLines } = useLocation();
 
     const mapViewRef = useRef<MapView>();
-    const followingRef = useRef<boolean>(true);
+    const following = useRef<boolean>(true);
+
+
 
     useEffect(() => {
         followUserLocation();
         return () => {
             stopFollowUserLocation();
         };
-    }, []);
+    },);
 
     useEffect(() => {
-        if (!followingRef.current) { return; }
+
+        if (!following.current) { return; }
+
         const { latitude, longitude } = userLocation;
         mapViewRef.current?.animateCamera({
             center: { latitude, longitude },
         });
     }, [userLocation]);
 
+
     const centerPosition = async () => {
+
         const { latitude, longitude } = await getCurrentLocation();
 
-        followingRef.current = true;
+        following.current = true;
 
         mapViewRef.current?.animateCamera({
             center: { latitude, longitude },
         });
     };
 
+
+
     if (!hasLocation) {
-        <LoadingScreen />;
+        return <LoadingScreen />;
     }
+
 
     return (
         <>
             <MapView
-                ref={(ele) => mapViewRef.current = ele!}
+                ref={(el) => mapViewRef.current = el!}
                 style={{ flex: 1 }}
+                // provider={ PROVIDER_GOOGLE }
                 showsUserLocation
-                // provider={PROVIDER_GOOGLE}
                 initialRegion={{
-                    latitude: 18.935640112827077,
-                    longitude: -103.96473259001439,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421,
+                    latitude: initialPosition.latitude,
+                    longitude: initialPosition.longitude,
+                    latitudeDelta: 0.0222,
+                    longitudeDelta: 0.0221,
                 }}
-                onTouchStart={() => followingRef.current = false}
+                onTouchStart={() => following.current = false}
             >
                 {
                     showPolyline && (
@@ -75,25 +84,36 @@ const Map = () => {
 
                 <Marker
                     coordinate={{
-                        latitude: 18.935640112827077,
-                        longitude: -103.96473259001439,
+                        latitude: 18.935487889295516,
+                        longitude: -103.96242589032352,
                     }}
-                    title="AimeP3"
-                    description="Ubicación de tu nutricionista"
+                    title="Esto es un título"
+                    description="Esto es una descripción del marcador"
                 />
+
             </MapView>
 
             <Fab
                 iconName="compass-outline"
                 onPress={centerPosition}
-                style={{ position: 'absolute', bottom: 20, right: 20 }}
+                style={{
+                    position: 'absolute',
+                    bottom: 20,
+                    right: 20,
+                }}
             />
 
             <Fab
                 iconName="brush-outline"
                 onPress={() => setShowPolyline(!showPolyline)}
-                style={{ position: 'absolute', bottom: 80, right: 20 }}
+                style={{
+                    position: 'absolute',
+                    bottom: 80,
+                    right: 20,
+                }}
             />
+
+
         </>
     );
 };
