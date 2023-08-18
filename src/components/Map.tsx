@@ -1,7 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 
+import Geolocation from '@react-native-community/geolocation';
+
+
 const Map = () => {
+
+    useEffect(() => {
+        Geolocation.getCurrentPosition(
+            info => console.log(info),
+            (err) => console.log({ err }),
+            {
+                enableHighAccuracy: true,
+            }
+        );
+    });
+
     return (
         <>
             <MapView
