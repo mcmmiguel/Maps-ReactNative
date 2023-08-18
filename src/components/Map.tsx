@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { useLocation } from '../hooks/useLocation';
 import LoadingScreen from '../screens/LoadingScreen';
@@ -9,13 +9,35 @@ import Fab from './Fab';
 
 const Map = () => {
 
-    const { hasLocation, initialPosition, getCurrentLocation } = useLocation();
+    const { hasLocation,
+        initialPosition,
+        getCurrentLocation,
+        followUserLocation,
+        stopFollowUserLocation,
+        userLocation } = useLocation();
 
     const mapViewRef = useRef<MapView>();
+    const followingRef = useRef<boolean>(true);
+
+    useEffect(() => {
+        followUserLocation();
+        return () => {
+            stopFollowUserLocation();
+        };
+    }, []);
+
+    useEffect(() => {
+        if (!followingRef.current) { return; }
+        const { latitude, longitude } = userLocation;
+        mapViewRef.current?.animateCamera({
+            center: { latitude, longitude },
+        });
+    }, [userLocation]);
 
     const centerPosition = async () => {
-
         const { latitude, longitude } = await getCurrentLocation();
+
+        followingRef.current = true;
 
         mapViewRef.current?.animateCamera({
             center: { latitude, longitude },
@@ -39,6 +61,7 @@ const Map = () => {
                     latitudeDelta: 0.0922,
                     longitudeDelta: 0.0421,
                 }}
+                onTouchStart={() => followingRef.current = false}
             >
                 <Marker
                     coordinate={{
