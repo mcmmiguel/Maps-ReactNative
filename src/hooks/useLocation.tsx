@@ -25,10 +25,7 @@ export const useLocation = () => {
                 setHasLocation(true);
 
             },
-            (err) => console.log({ err }),
-            {
-                enableHighAccuracy: true,
-            }
+            (err) => console.log({ err }), { enableHighAccuracy: true }
         );
     });
 

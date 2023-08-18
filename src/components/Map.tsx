@@ -2,6 +2,7 @@ import React from 'react';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { useLocation } from '../hooks/useLocation';
 import LoadingScreen from '../screens/LoadingScreen';
+import Fab from './Fab';
 
 
 
@@ -21,8 +22,8 @@ const Map = () => {
                 showsUserLocation
                 provider={PROVIDER_GOOGLE}
                 initialRegion={{
-                    latitude: initialPosition.latitude,
-                    longitude: initialPosition.longitude,
+                    latitude: 18.935640112827077,
+                    longitude: -103.96473259001439,
                     latitudeDelta: 0.0922,
                     longitudeDelta: 0.0421,
                 }}
@@ -36,6 +37,12 @@ const Map = () => {
                     description="Ubicación de tu nutricionista"
                 />
             </MapView>
+
+            <Fab
+                iconName="star-outline"
+                onPress={() => console.log('Holiis')}
+                style={{ position: 'absolute', bottom: 20, right: 20 }}
+            />
         </>
     );
 };
