@@ -15,10 +15,6 @@ const PermissionsScreen = () => {
                 title="Permiso"
                 onPress={askLocationPermission}
             />
-
-            <Text style={{ marginTop: 20 }}>
-                {JSON.stringify(permissions, null, 5)}
-            </Text>
         </View>
     );
 };

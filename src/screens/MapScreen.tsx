@@ -1,11 +1,10 @@
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import React from 'react';
 import Map from '../components/Map';
 
 const MapScreen = () => {
     return (
-        <View style={{ width: '90%', height: '20%', alignSelf: 'center' }}>
-            <Text>MapScreen</Text>
+        <View style={{ width: '90%', flex: 1, alignSelf: 'center' }}>
             <Map />
         </View>
     );
